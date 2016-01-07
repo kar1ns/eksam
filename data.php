@@ -7,31 +7,31 @@
 	$title = $price = "";
 	$title_error = $price_error = "";
 	
-	// keegi vajutas nuppu numbrim�rgi lisamiseks
+	// keegi vajutas nuppu numbrimärgi lisamiseks
 	if(isset($_POST["add_food"])){
 		
 		//echo $_SESSION["logged_in_user_id"];
 		
-		// valideerite v�ljad
+		// valideerite väljad
 		if ( empty($_POST["title"]) ) {
-			$title_error = "See v�li on kohustuslik";
+			$title_error = "See väli on kohustuslik";
 		}else{
 			$title = cleanInput($_POST["title"]);
 		}
 		
 		if ( empty($_POST["price"]) ) {
-			$price_error = "See v�li on kohustuslik";
+			$price_error = "See väli on kohustuslik";
 		}else{
 			$price = cleanInput($_POST["price"]);
 		}
 		
-		// m�lemad on kohustuslikud
+		// mõlemad on kohustuslikud
 		if($price_error == "" && $title_error == ""){
 			//salvestate ab'i fn kaudu addCarPlate
 			$msg = addMenuPlate($title, $price);
 			
 			if($msg != ""){
-				//�nnestus
+				//õnnestus
 				$title = "";
 				$price = "";
 				
@@ -61,3 +61,12 @@
 	<input id="price" name="price" type="text" value="<?php echo $price; ?>"> <?php echo $price_error; ?><br><br>
 	<input type="submit" name="add_food" value="Salvesta">
 </form>
+
+
+<h2>Tee päeva või nädala menüü</h2>
+<h3>Kirjuta sobiv pealkiri lahtsisse</h3>
+<form method="post">
+    <input name="name" type="text">
+    <input type="submit" name="createList" value="Loo menüü" class="btn btn-success">
+</form>
+<br>

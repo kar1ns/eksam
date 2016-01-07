@@ -4,23 +4,17 @@
 	require_once("../config_global.php");
 	$database = "if15_kar1ns";
 	
-	function getMenuData($keyword=""){
+	session_start();
 	
-		if($keyword ==""){
-			echo "Ei otsi";
-		}else{
-			echo "Otsin ".$keyword;
-			$search = "%".$keyword."%";
-		}
+	function getMenuData(){
 	
 		$mysqli = new mysqli($GLOBALS["servername"], $GLOBALS["server_username"], $GLOBALS["server_password"], $GLOBALS["database"]);
 	
-		$stmt = $mysqli->prepare("SELECT id, title, price from food_list WHERE deleted IS NULL AND (price LIKE ? OR title LIKE ?)");
-		$stmt->bind_param("ss", $search, $search);
+		$stmt = $mysqli->prepare("SELECT id, title, price from food_list WHERE deleted IS NULL");
 		$stmt->bind_result($id, $title, $price);
 		$stmt->execute();
 		
-		$menu_array=array();
+		$array_of_menus=array();
 		$row = 0;
 		
 		//tee midagi seni kuni saame ab'st ühe rea andmeid
@@ -32,27 +26,29 @@
 			$menu->price = $price;
 			
 			//lisan massiivi
-			array_push($menu_array, $menu);
-
+			array_push($array_of_menus, $menu);
+			
 	}
-	return $menu_array;
+	return $array_of_menus;
 	
 	$stmt->close();
 	$mysqli->close();
 }
 
-	function deleteMenu($id){
+	function deleteFood($id){
 		$mysqli = new mysqli($GLOBALS["servername"], $GLOBALS["server_username"], $GLOBALS["server_password"], $GLOBALS["database"]);
 		$stmt = $mysqli->prepare("UPDATE food_list SET deleted=NOW() WHERE id=?");
-		
 		$stmt->bind_param("i", $id);
+	
 		if($stmt->execute()){
 			//sai kustutatud
 			header("Location: table.php");
 		}
+		$stmt->close();
+		$mysqli->close();
 	
 	}
-	function updateMenu($id, $title, $price){
+	function updateFood($id, $title, $price){
 	
 		$mysqli = new mysqli($GLOBALS["servername"], $GLOBALS["server_username"], $GLOBALS["server_password"], $GLOBALS["database"]);
 		$stmt = $mysqli->prepare("UPDATE food_list SET title=?, price=? WHERE id=?");
@@ -63,6 +59,8 @@
 			header("Location: table.php");
 	
 		}
+		$stmt->close();
+		$mysqli->close();
 	}
 	
 	function addMenuPlate($title, $price) {
