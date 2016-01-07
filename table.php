@@ -9,6 +9,12 @@
 		deleteFood($_GET["delete"]);
 	
 	}
+	if(isset($_POST["save"])){
+	
+	
+		updateFood($_POST["id"], $_POST["title"], $_POST["price"]);
+	
+	}
 	
 	$array_of_menus = getMenuData();
 	//trükin välja esimese auto
